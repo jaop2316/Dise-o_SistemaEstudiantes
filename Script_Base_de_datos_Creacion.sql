@@ -17,6 +17,6 @@ notaUno dec(2,1),
 notaDos dec(2,1),
 notaTres dec(2,1),
 notaFinal dec(2,1),
-statusAprueba char(1), -- Para la verificacion que si aprueba "A"o falla "F"o supletorio("S")
+statusAprueba char(1) check(statusAprueba in('A','F')), -- Para la verificacion que si aprueba "A"o falla "F"o supletorio("S")
 FOREIGN KEY(codigoEstudiante) REFERENCES Estudiantes (codigoEstudiante)
 )
