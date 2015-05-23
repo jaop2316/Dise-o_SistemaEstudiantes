@@ -15,6 +15,7 @@ create table Notas(
 codigoEstudiante char(3) PRIMARY KEY,
 notaUno dec(2,1),
 notaDos dec(2,1),
+notaTres dec(2,1),
 notaFinal dec(2,1),
 FOREIGN KEY(codigoEstudiante) REFERENCES Estudiantes (codigoEstudiante)
 )
