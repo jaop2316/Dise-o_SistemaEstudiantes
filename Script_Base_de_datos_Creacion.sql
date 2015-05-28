@@ -35,6 +35,9 @@ create table reprobados(codigoEstudiante char(3) foreign key references Estudian
 nombreEstudiante varchar(50),apellidoEstudiante varchar(50),
 primary Key(codigoEstudiante))
 
+create table Resultado_Especificos(
+NroEstudiantes int ,Grupo char(10))
+
 /*Trigger para controlar la insercion de las notas , que sume las notas y de la final*/
 create trigger tr_InserccionNotas 
 on Notas 
@@ -100,7 +103,7 @@ end
 
 /*Trigger para que mediante un update se ingrese la nota del supletorio y se sume a la nota para 
 ver si pasa o no*/
-alter trigger tr_Supletorio 
+create trigger tr_Supletorio 
 on Notas
 after update 
 as 
@@ -140,6 +143,82 @@ begin
 if (@NotaFinal+@NotaTres>=24)
 update Notas set statusAprueba='A' from Notas n , inserted i 
 where n.codigoEstudiante=i.codigoEstudiante
+end
+end
+
+
+
+alter trigger _trResultados
+on Notas 
+after insert 
+as 
+declare
+@nroEstudiantesAprobados int ,
+@nroEstudiantesSupletorio int,
+@nroEstudiantesFallidos int ,
+@statusEstudiante char(1)
+set @nroEstudiantesAprobados=(select count(*) from aprobados)
+set @nroEstudiantesSupletorio=(select count(*) from supletorio)
+set @nroEstudiantesFallidos=(select count(*) from reprobados)
+set @statusEstudiante=(select n.statusAprueba from Notas n , inserted i 
+where n.codigoEstudiante=i.codigoEstudiante)
+
+if not exists (select Grupo from Resultado_Especificos where Grupo='Aprobados' ) 
+begin
+if(@statusEstudiante='A')
+begin 
+insert into Resultado_Especificos values(@nroEstudiantesAprobados,'Aprobados')
+end
+end
+else 
+begin
+if not exists (select Grupo from Resultado_Especificos where Grupo='Suspensos' ) and(@statusEstudiante='S')
+begin 
+insert into Resultado_Especificos values(@nroEstudiantesSupletorio,'Suspensos')
+end
+else
+begin
+if not exists (select Grupo from Resultado_Especificos where Grupo='Fallidos' ) and (@statusEstudiante='F')
+begin
+insert into Resultado_Especificos values(@nroEstudiantesFallidos,'Fallidos')
+end
+end
+end
+
+
+
+
+create trigger tr_actualizarREsultado_Especificos
+on Notas 
+after insert 
+as 
+declare
+@nroEstudiantesAprobados int ,
+@nroEstudiantesSupletorio int,
+@nroEstudiantesFallidos int ,
+@statusEstudiante char(1)
+set @nroEstudiantesAprobados=(select count(*) from aprobados)
+set @nroEstudiantesSupletorio=(select count(*) from supletorio)
+set @nroEstudiantesFallidos=(select count(*) from reprobados)
+set @statusEstudiante=(select n.statusAprueba from Notas n , inserted i 
+where n.codigoEstudiante=i.codigoEstudiante)
+
+if(@statusEstudiante='A')
+begin 
+update Resultado_Especificos set NroEstudiantes=@nroEstudiantesAprobados from Resultado_Especificos
+ where Grupo='APROBADOS'
+end
+else 
+begin
+if(@statusEstudiante='S')
+begin 
+update Resultado_Especificos set NroEstudiantes=@nroEstudiantesAprobados from Resultado_Especificos
+ where Grupo='SUSPENSOS'
+end
+else
+begin
+update Resultado_Especificos set NroEstudiantes=@nroEstudiantesAprobados from Resultado_Especificos
+ where Grupo='FALLIDOS'
 end
 end
 
@@ -190,8 +269,15 @@ select *from Notas
 select *from aprobados
 select *from reprobados 
 select *from supletorio
+select *from Resultado_Especificos
 select *from Estudiantes
+truncate table Notas 
+truncate table aprobados
+truncate table reprobados
+truncate table supletorio
+truncate table Resultado_Especificos
 
+select count(*) from aprobados ,reprobados,supletorio
 
 
 
