@@ -14,11 +14,11 @@ nombreEstudiante varchar(50)
 
 create table Notas(
 codigoEstudiante char(3) PRIMARY KEY,
-notaUno int check(notaUno > 0 and notaUno <=10),
-notaDos int check(notaDos > 0 and notaDos <=10),
-notaTres int check(notaTres > 0 and notaTres <=10),
-notaFinal int check(notaFinal > 0 and notaFinal <=10),
-statusAprueba char(1) default (null),
+notaUno dec(3,1) check(notaUno > 0 and notaUno <=10),
+notaDos dec(3,1) check(notaDos > 0 and notaDos <=10),
+notaTres dec(3,1) default (null) check(notaTres > 0 and notaTres <=10),
+notaFinal dec(4,1) default (null) check(notaFinal > 0 and notaFinal <=10),
+statusAprueba char(1) default (null) check(statusAprueba in('A','F','S')),
 FOREIGN KEY(codigoEstudiante) REFERENCES Estudiantes (codigoEstudiante)
 )
 
@@ -42,18 +42,19 @@ insert into Estudiantes values ('E15','Tapia','Jorge')
 
 
 select *from Notas
-insert into Notas values ('E01',8,9,8,8,default)
-insert into Notas values ('E02',4,8,6,6,default)
-insert into Notas values ('E03',9,10,9,9,default)
-insert into Notas values ('E04',7,7,7,7,default)
-insert into Notas values ('E05',10,8,6,8,default)
-insert into Notas values ('E06',6,7,8,7,default)
-insert into Notas values ('E07',9,9,8,9,default)
-insert into Notas values ('E08',3,10,6,6,default)
-insert into Notas values ('E09',4,7,5,5,default)
-insert into Notas values ('E10',8,10,9,9,default)
-insert into Notas values ('E11',10,8,7,8,default)
-insert into Notas values ('E12',8,6,8,7,default)
-insert into Notas values ('E13',10,5,7,7,default)
-insert into Notas values ('E14',9,8,9,9,default)
-insert into Notas values ('E15',5,7,4,5,default)
+insert into Notas values ('E01',8.5,9.0,default,default,default)
+insert into Notas values ('E02',4.0,4.5,default,default,default)
+insert into Notas values ('E03',5.0,4.0,default,default,default)
+insert into Notas values ('E04',7.0,7.0,default,default,default)
+insert into Notas values ('E05',4.5,6.0,default,default,default)
+insert into Notas values ('E06',6.5,7.0,default,default,default)
+insert into Notas values ('E07',9.0,9.0,default,default,default)
+insert into Notas values ('E08',3.5,5.0,default,default,default)
+insert into Notas values ('E09',4.5,5.0,default,default,default)
+insert into Notas values ('E10',8.0,7.5,default,default,default)
+insert into Notas values ('E11',10.0,7.5,default,default,default)
+insert into Notas values ('E12',8.0,6.0,default,default,default)
+insert into Notas values ('E13',10.0,5.0,default,default,default)
+insert into Notas values ('E14',9.0,8.0,default,default,default)
+insert into Notas values ('E15',8.0,7.5,default,default,default)
+
