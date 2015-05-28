@@ -40,6 +40,7 @@ public class clsEstudiante
         get { return _idEstudiante; }
         set { _idEstudiante = value; }
     }
+
     public double Nota2
     {
         get { return _nota2; }
@@ -97,7 +98,7 @@ public class clsEstudiante
     public string Status()
     {
         
-   String status;
+        String status;
         if ((Nota + Nota2 >= 14))
         {
             status = Convert.ToString('A');
