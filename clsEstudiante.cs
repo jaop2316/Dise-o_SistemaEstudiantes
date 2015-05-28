@@ -8,15 +8,16 @@ using System.Web;
 /// </summary>
 public class clsEstudiante
 {
-    public clsEstudiante(string idEstudiante, string nombre, string apellido, string cedula, double nota1, double nota2, double nota3)
+	
+		public clsEstudiante()
     {
-        this.IdEstudiante = idEstudiante;
-        this.Nombre = nombre;
-        this.Apellido = apellido;
-        this.Cedula = cedula;
-        this.Nota = nota1;
-        this.Nota2 = nota2;
-        this.Nota3 = nota3;
+        this.IdEstudiante = _idEstudiante;
+        this.Nombre = _nombre;
+        this.Apellido = _apellido;
+        this.Cedula = _cedula;
+        this.Nota = _nota;
+        this.Nota2 = _nota2;
+        this.Nota3 = _nota3;
         this.NotaTotal = 0;
     }
     //Atributos
@@ -28,6 +29,8 @@ public class clsEstudiante
     private double _nota2;
     private double _nota3;
     private double _notaTotal;
+    private string _status;
+
 
 
     //Metodos set y get
@@ -76,5 +79,70 @@ public class clsEstudiante
         set { _notaTotal = value; }
     }
 
+    public double Suma()
+    {
+        double Suma;
+        Suma = Nota + Nota2;
+        return Suma;
 
+    }
+
+    public string Status1
+{
+  get { return _status; }
+  set { _status = value; }
 }
+
+
+    public string Status()
+    {
+        
+   String status;
+        if ((Nota + Nota2 >= 14))
+        {
+            status = Convert.ToString('A');
+        }
+        else
+        {
+            if ((Nota + Nota2 >= 9 && Nota + Nota2 < 14))
+            {
+                status = Convert.ToString('F');
+            }
+            else
+            {
+                status = Convert.ToString('F');
+            }
+
+        }
+
+        return status;
+    }
+
+    public double SumaSupletorio(string status)
+    {
+        double suma=0;
+       
+        if (String.Compare(status, Convert.ToString("A")) == 0)
+        {
+            suma = Nota + Nota2 + Nota3;
+        }
+
+        return suma;
+    }
+
+    public string ActualizarEstadoLuegoSupletorio(double suma)
+    {
+        String status;
+        if (suma >= 24)
+        {
+            status = Convert.ToString('A');
+        }
+        else
+        {
+            status = Convert.ToString('F');
+        }
+
+        return status;
+    }
+
+	}
